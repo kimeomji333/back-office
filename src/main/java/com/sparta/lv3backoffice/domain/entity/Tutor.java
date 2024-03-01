@@ -1,6 +1,6 @@
 package com.sparta.lv3backoffice.domain.entity;
 
-import com.sparta.lv3backoffice.global.Timestamped;
+import com.sparta.lv3backoffice.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

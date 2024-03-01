@@ -1,4 +1,4 @@
-package com.sparta.lv3backoffice.global;
+package com.sparta.lv3backoffice.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

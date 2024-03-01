@@ -1,6 +1,6 @@
 package com.sparta.lv3backoffice.domain.entity;
 
-import com.sparta.lv3backoffice.global.Timestamped;
+import com.sparta.lv3backoffice.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,13 +29,12 @@ public class Lecture extends Timestamped {
     private String description;
 
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private CategoryEnum category;
+    private String category;
 
     @Column(nullable = false)
     private Long price;
 
-    public Lecture(Tutor tutor, String title, String description, CategoryEnum category, Long price) {
+    public Lecture(Tutor tutor, String title, String description, String category, Long price) {
         this.tutor = tutor;
         this.title = title;
         this.description = description;

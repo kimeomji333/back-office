@@ -12,6 +12,7 @@ public class SignupRequestDto {
     private String username;
     //@NotBlank
     private String password;
+    private String department;
     //@Email
     //@NotBlank
     private String email;

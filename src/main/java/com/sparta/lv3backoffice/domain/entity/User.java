@@ -1,12 +1,22 @@
 package com.sparta.lv3backoffice.domain.entity;
 
+import com.sparta.lv3backoffice.domain.dto.SignupRequestDto;
+import com.sparta.lv3backoffice.domain.service.UserService;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,15 +38,14 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private DepartmentEnum department;
+    @Column(nullable = false)
+    private String department;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public User(String username, String password, String email, DepartmentEnum department, UserRoleEnum role) {
+    public User(String username, String password, String email, String department, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.email = email;

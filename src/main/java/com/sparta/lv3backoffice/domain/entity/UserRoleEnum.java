@@ -1,5 +1,6 @@
 package com.sparta.lv3backoffice.domain.entity;
 
+// 사용자의 권한을 관리하는 enum class // MANAGER, STAFF 권한
 public enum UserRoleEnum {
     USER(Authority.USER),  // 사용자 권한
     ADMIN(Authority.ADMIN);  // 관리자 권한
