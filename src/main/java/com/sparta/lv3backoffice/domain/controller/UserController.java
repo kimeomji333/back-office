@@ -1,6 +1,6 @@
 package com.sparta.lv3backoffice.domain.controller;
 
-import com.sparta.lv3backoffice.domain.dto.SignupRequestDto;
+import com.sparta.lv3backoffice.domain.dto.user.SignupRequestDto;
 import com.sparta.lv3backoffice.domain.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

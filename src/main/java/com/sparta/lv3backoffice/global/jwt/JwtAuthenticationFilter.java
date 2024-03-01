@@ -2,7 +2,7 @@ package com.sparta.lv3backoffice.global.jwt;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.lv3backoffice.domain.dto.LoginRequestDto;
+import com.sparta.lv3backoffice.domain.dto.user.LoginRequestDto;
 import com.sparta.lv3backoffice.domain.entity.UserRoleEnum;
 import com.sparta.lv3backoffice.global.security.UserDetailsImpl;
 import jakarta.servlet.FilterChain;

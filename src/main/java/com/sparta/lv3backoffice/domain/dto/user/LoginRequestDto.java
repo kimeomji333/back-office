@@ -1,4 +1,4 @@
-package com.sparta.lv3backoffice.domain.dto;
+package com.sparta.lv3backoffice.domain.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.sparta.lv3backoffice.domain.dto;
+package com.sparta.lv3backoffice.domain.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,13 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SignupRequestDto {
-    //@NotBlank
+    @NotBlank
     private String username;
-    //@NotBlank
+    @NotBlank
     private String password;
     private String department;
-    //@Email
-    //@NotBlank
+    @Email
+    @NotBlank
     private String email;
     private boolean admin = false;
     private String adminToken = "";
