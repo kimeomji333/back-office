@@ -67,12 +67,9 @@ public class UserService {
             role = UserRoleEnum.MANAGER;  // 위에서 USER -> ADMIN 권한으로 덮어짐.
         }
 
-        // 부서가 커리큘럼이나 개발 부사인 경우에만 권한 업데이트. 사용자 등록
-        User user = new User(username, password, email, department, role);
-        if ("커리큘럼".equals(department) || "개발".equals(department)) {
-            user.setRole(UserRoleEnum.MANAGER);
-            userRepository.save(user);
-        }
+        // 사용자 등록
+        User user = new User(username, password, email, department, role);  // 등록하려면 user entity 클래스 객체를 만듦 : JPA 에서 Entity class 객체 하나가 DB의 한 열과 같다. (안의 내용은 생성자) 생성자를 통해서 만듦. 빨간 밑줄 뜨면 Create Constructor ^^
+        userRepository.save(user);
     }
 
     // 로그인

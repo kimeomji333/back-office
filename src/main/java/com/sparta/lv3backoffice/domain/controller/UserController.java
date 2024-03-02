@@ -75,7 +75,7 @@ public class UserController {
             );
 
             // 인증에 성공했으므로 JWT 토큰 생성
-            String token = jwtUtil.createToken(loginRequestDto.getUsername(), null); // 권한은 null로 설정하거나 필요에 따라 사용자의 역할 정보를 전달
+            String token = jwtUtil.createToken(loginRequestDto.getUsername(), null); // 권한은 null 로 설정하거나 필요에 따라 사용자의 역할 정보를 전달
 
             // JWT 토큰을 Response 의 헤더에 추가
             jwtUtil.addJwtToHeader(token, response);

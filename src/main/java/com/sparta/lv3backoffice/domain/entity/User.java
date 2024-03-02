@@ -1,7 +1,10 @@
 package com.sparta.lv3backoffice.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +30,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private Department department;
 
-    @Setter
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
