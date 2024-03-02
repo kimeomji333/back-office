@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tutors")
-public class Tutor extends Timestamped {
+public class Tutor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

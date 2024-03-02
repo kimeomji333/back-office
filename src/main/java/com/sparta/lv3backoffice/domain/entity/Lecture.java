@@ -1,5 +1,6 @@
 package com.sparta.lv3backoffice.domain.entity;
 
+import com.sparta.lv3backoffice.domain.dto.lecture.LectureRequestDto;
 import com.sparta.lv3backoffice.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,9 @@ public class Lecture extends Timestamped {
     private Tutor tutor;
 
     @Column(nullable = false)
+    private String tutorName;
+
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -40,5 +44,21 @@ public class Lecture extends Timestamped {
         this.description = description;
         this.category = category;
         this.price = price;
+    }
+
+    public Lecture(LectureRequestDto lectureRequestDto) {
+        this.tutorName = lectureRequestDto.getTutorName();
+        this.title = lectureRequestDto.getTitle();
+        this.description = lectureRequestDto.getDescription();
+        this.category = lectureRequestDto.getCategory();
+        this.price = lectureRequestDto.getPrice();
+    }
+
+    public void update(LectureRequestDto lectureRequestDto) {
+        this.tutorName = lectureRequestDto.getTutorName();
+        this.title = lectureRequestDto.getTitle();
+        this.description = lectureRequestDto.getDescription();
+        this.category = lectureRequestDto.getCategory();
+        this.price = lectureRequestDto.getPrice();
     }
 }
