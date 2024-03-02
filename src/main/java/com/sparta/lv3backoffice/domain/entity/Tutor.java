@@ -1,7 +1,6 @@
 package com.sparta.lv3backoffice.domain.entity;
 
 import com.sparta.lv3backoffice.domain.dto.tutor.TutorRequestDto;
-import com.sparta.lv3backoffice.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

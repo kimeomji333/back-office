@@ -5,6 +5,7 @@ import com.sparta.lv3backoffice.domain.dto.tutor.TutorResponseDto;
 import com.sparta.lv3backoffice.domain.entity.Lecture;
 import com.sparta.lv3backoffice.domain.entity.Tutor;
 import com.sparta.lv3backoffice.domain.entity.UserRoleEnum;
+import com.sparta.lv3backoffice.domain.repository.LectureRepository;
 import com.sparta.lv3backoffice.domain.repository.TutorRepository;
 import com.sparta.lv3backoffice.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TutorService {
     private final TutorRepository tutorRepository;
+    //private final LectureRepository lectureRepository;
     private final JwtUtil jwtUtil;
 
     private final String MANAGER_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
@@ -42,6 +44,7 @@ public class TutorService {
     // 선택한 강사 정보 수정
     public Long updateTutor(Long tutorId, TutorRequestDto tutorRequestDto, String token) {
 
+        //
         // 인증 : 토큰 확인
         if (!jwtUtil.validateToken(token)) {
             throw new IllegalArgumentException("Token Error");
@@ -79,18 +82,6 @@ public class TutorService {
         return new TutorResponseDto(tutor);
     }
 
-
-    // 선택한 강사가 촬영한 강의 목록 조회
-    public List<Lecture> getTutorLectures(Long tutorId, String token) {
-
-        // 인증 : 토큰 확인
-        if (!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("Token Error");
-        }
-
-        // 해당 강사가 DB 에 존재하는지 확인 후 반환
-        return (List<Lecture>) tutorRepository.findByTutorIdOrderByCreatedAtDesc(tutorId);
-    }
 
 //------------------ 메서드 -------------------
 

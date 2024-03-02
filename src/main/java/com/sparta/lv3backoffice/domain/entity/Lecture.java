@@ -21,7 +21,7 @@ public class Lecture extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tutor_id")
-    private Tutor tutor;
+    private Tutor tutorId;
 
     @Column(nullable = false)
     private String tutorName;
@@ -38,8 +38,8 @@ public class Lecture extends Timestamped {
     @Column(nullable = false)
     private Long price;
 
-    public Lecture(Tutor tutor, String title, String description, String category, Long price) {
-        this.tutor = tutor;
+    public Lecture(Tutor tutorId, String title, String description, String category, Long price) {
+        this.tutorId = tutorId;
         this.title = title;
         this.description = description;
         this.category = category;

@@ -7,11 +7,18 @@ import com.sparta.lv3backoffice.domain.dto.user.SignupRequestDto;
 import com.sparta.lv3backoffice.domain.entity.User;
 import com.sparta.lv3backoffice.domain.entity.UserRoleEnum;
 import com.sparta.lv3backoffice.domain.repository.UserRepository;
+import com.sparta.lv3backoffice.global.exception.NotFoundException;
+import com.sparta.lv3backoffice.global.exception.UnauthorizedException;
 import com.sparta.lv3backoffice.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -63,6 +70,32 @@ public class UserService {
         // 사용자 등록
         User user = new User(username, password, email, department, role);  // 등록하려면 user entity 클래스 객체를 만듦 : JPA 에서 Entity class 객체 하나가 DB의 한 열과 같다. (안의 내용은 생성자) 생성자를 통해서 만듦. 빨간 밑줄 뜨면 Create Constructor ^^
         userRepository.save(user);
+    }
 
+    // 로그인
+    public ResponseEntity<?> login(String email, String password) {
+
+        // 이메일로 사용자 정보 조회
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("등록된 사용자가 없습니다."));
+
+        // 비밀번호 검증
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // JwtUtil 클래스를 사용해서 JWT 토큰 생성
+        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
+
+        // 발급한 토큰을 Header 에 추가하여 로그인 성공 확인을 함께 반환
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+        // 사용자 정보와 토큰을 함께 반환
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", user);
+        response.put("token", token);
+
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 }

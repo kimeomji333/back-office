@@ -9,6 +9,4 @@ import java.util.Collection;
 
 @Repository
 public interface TutorRepository extends JpaRepository <Tutor, Long> {
-
-    Collection<Lecture> findByTutorIdOrderByCreatedAtDesc(Long tutorId);
 }

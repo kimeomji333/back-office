@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TutorRequestDto {
-    // 로그인을 통해 발급받은 JWT가 함께 요청
     private String tutorName;
     private Long experienceYears;
     private String company;

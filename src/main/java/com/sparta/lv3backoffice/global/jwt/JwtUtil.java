@@ -86,6 +86,12 @@ public class JwtUtil {
         }
     }
 
+    // + 추가 구현
+    // 생성된 JWT 를 Header 에 저장
+    public void addJwtToHeader(String token, HttpServletResponse res) {
+        res.addHeader("Authorization", "Bearer " + token);
+    }
+
     //  Cookie 에 들어있던 JWT 토큰을 Substring  // Bearer 공백을 띄어내야하니.
     public String substringToken(String tokenValue) {  // 토큰의 tokenValue 를 받아오기
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {  // 공백인지, 널인지 확인 && Bearer 시작하는지
