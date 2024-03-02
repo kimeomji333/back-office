@@ -27,13 +27,14 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String department;
+    @Enumerated(value = EnumType.STRING)
+    private Department department;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public User(String username, String password, String email, String department, UserRoleEnum role) {
+    public User(String username, String password, String email, Department department, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.email = email;

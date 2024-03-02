@@ -4,6 +4,7 @@ package com.sparta.lv3backoffice.domain.service;
 // 로그인, 가입 서비스
 
 import com.sparta.lv3backoffice.domain.dto.user.SignupRequestDto;
+import com.sparta.lv3backoffice.domain.entity.Department;
 import com.sparta.lv3backoffice.domain.entity.User;
 import com.sparta.lv3backoffice.domain.entity.UserRoleEnum;
 import com.sparta.lv3backoffice.domain.repository.UserRepository;
@@ -57,15 +58,14 @@ public class UserService {
 
         // 사용자 ROLE 확인 (권한확인)
         UserRoleEnum role = UserRoleEnum.STAFF;  // 일반 사용자 권한을 넣어놓은다.
-        if (requestDto.isAdmin()) {   // boolean type 은 is 로 시작함(규칙), isAdmin // (true)면 관리자 권한으로 회원가입
+        // 사용자 department 확인
+        Department department = Department.valueOf(requestDto.getDepartment());
+        if (department!=Department.MARKETING) {   // boolean type 은 is 로 시작함(규칙), isAdmin // (true)면 관리자 권한으로 회원가입
             if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
                 throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
             }
             role = UserRoleEnum.MANAGER;  // 위에서 USER -> ADMIN 권한으로 덮어짐.
         }
-
-        // 사용자 department 확인
-        String department = requestDto.getDepartment();
 
         // 사용자 등록
         User user = new User(username, password, email, department, role);  // 등록하려면 user entity 클래스 객체를 만듦 : JPA 에서 Entity class 객체 하나가 DB의 한 열과 같다. (안의 내용은 생성자) 생성자를 통해서 만듦. 빨간 밑줄 뜨면 Create Constructor ^^
