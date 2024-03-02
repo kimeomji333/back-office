@@ -1,10 +1,10 @@
-package com.sparta.lv3backoffice.global.jwt;
+package com.sparta.lv3backoffice.global.security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.lv3backoffice.domain.dto.user.LoginRequestDto;
 import com.sparta.lv3backoffice.domain.entity.UserRoleEnum;
-import com.sparta.lv3backoffice.global.security.UserDetailsImpl;
+import com.sparta.lv3backoffice.global.jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,14 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 
+import static com.sparta.lv3backoffice.global.jwt.JwtUtil.AUTHORIZATION_HEADER;
+
 // 인증 필터
-// ( UserController.java 에서 login 메서드 지우기 !)
-// ( UserService.java 에서 로그인 구현 부분 지우기 !)
-// 로그인은 필터에서 만들자 !
-// UsernamePasswordAuthenticationFilter 상속 받아서 사용.
-// 역할 : 사용자가 이름, 비번 보내면, 인증객체(이름 비번 토큰) 만든 다음 Authentication manager 를 통해서 확인까지 함.
-// 하지만 우린 직접 하기 위해서 상속 받아옴. 왜냐 jwt 까지 생성해야 하니깐 커스텀 해서 만들자 !
-// (UsernamePasswordAuthenticationFilter 그대로 사용하면 세션 방식)
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -50,7 +45,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return getAuthenticationManager().authenticate(  // 상속을 받았으니 사용가능 authenticate 메서드 : 인증처리함
                     new UsernamePasswordAuthenticationToken( // 토큰은 만들어서 값을 각각 get 해옴. 권한은 null
-                            requestDto.getUsername(),
+                            requestDto.getEmail(),
                             requestDto.getPassword(),
                             null
                     )
@@ -73,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
         String token = jwtUtil.createToken(username, role);
-        jwtUtil.addJwtToCookie(token, response); // addJwtToCookie 메서드 : 쿠키 생성하고, 받아온 response 객체에 넣어줌
+        response.addHeader(AUTHORIZATION_HEADER, token); // addJwtToCookie 메서드 : 쿠키 생성하고, 받아온 response 객체에 넣어줌
     }
 
     // unsuccessfulAuthentication : 만약 인증 실패 시 메서드 실행

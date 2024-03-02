@@ -1,6 +1,6 @@
-package com.sparta.lv3backoffice.global.jwt;
+package com.sparta.lv3backoffice.global.security;
 
-import com.sparta.lv3backoffice.global.security.UserDetailsServiceImpl;
+import com.sparta.lv3backoffice.global.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,16 +33,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     // OncePerRequestFilter 상속 받으면, HttpServletRequest req, HttpServletResponse res 받아올 수 있어. 그냥 상속을 받았구나 간단히 생각하기.
-    //
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        String tokenValue = jwtUtil.getTokenFromRequest(req);
+        String tokenValue = jwtUtil.getJwtFromHeader(req);
 
         if (StringUtils.hasText(tokenValue)) {  // hasText 사용해서 있는지 확인
-            // JWT 토큰 substring
-            tokenValue = jwtUtil.substringToken(tokenValue);
-            log.info(tokenValue);
 
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
