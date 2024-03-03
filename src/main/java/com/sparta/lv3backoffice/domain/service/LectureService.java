@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 // 강의 관련 서비스
 public class LectureService {
     private final LectureRepository lectureRepository;
@@ -24,12 +23,17 @@ public class LectureService {
 
     private final String MANAGER_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
+    public LectureService(LectureRepository lectureRepository, JwtUtil jwtUtil) {
+        this.lectureRepository = lectureRepository;
+        this.jwtUtil = jwtUtil;
+    }
+
     // 강의 등록
     public LectureResponseDto registerLecture(LectureRequestDto lectureRequestDto, @RequestHeader("Authorization") String token) {
-        // 인증 : 토큰 확인
-        if (!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("Token Error");
-        }
+//        // 인증 : 토큰 확인
+//        if (!jwtUtil.validateToken(token)) {
+//            throw new IllegalArgumentException("Token Error");
+//        }
 
         // 강의 등록
         Lecture lecture = lectureRepository.save(lectureRequestDto.toEntity());
@@ -72,7 +76,7 @@ public class LectureService {
 //        }
 
         // 강의가 DB에 존재하는지 확인
-        Lecture lecture = (Lecture) lectureRepository.findLectureId(lectureId).orElseThrow(() ->
+        Lecture lecture = lectureRepository.findLectureId(lectureId).orElseThrow(() ->
                 new IllegalArgumentException("선택한 강의는 존재하지 않습니다."));
 
         return new LectureResponseDto(lecture);
@@ -81,10 +85,10 @@ public class LectureService {
     // 카테고리별 강의 목록 조회
     public List<Lecture> getLecturesByCategory(String category, String token) {
 
-        // 인증 : 토큰 확인
-        if (!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("Token Error");
-        }
+//        // 인증 : 토큰 확인
+//        if (!jwtUtil.validateToken(token)) {
+//            throw new IllegalArgumentException("Token Error");
+//        }
 
         // 해당 카테고리에 강의가 DB에 존재하는지 확인 후 반환
         return (List<Lecture>) lectureRepository.findByCategoryOrderByCreatedAtDesc(category);

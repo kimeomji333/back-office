@@ -19,7 +19,7 @@ public class Tutor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tutorId;
 
-    @OneToMany(mappedBy = "tutor")
+    @OneToMany
     private List<Lecture> lectures = new ArrayList<>();
 
     @Column(nullable = false)

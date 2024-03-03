@@ -77,15 +77,15 @@ public class JwtUtil {
         }
         return null;
     }
-
-    // JWT 토큰 substring
-    public String substringToken(String tokenValue) {
-        if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
-            return tokenValue.substring(7);
-        }
-        log.error("Not Found Token");
-        throw new NullPointerException("Not Found Token");
-    }
+//
+//    // JWT 토큰 substring
+//    public String substringToken(String tokenValue) {
+//        if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
+//            return tokenValue.substring(7);
+//        }
+//        log.error("Not Found Token");
+//        throw new NullPointerException("Not Found Token");
+//    }
 
     // JWT 검증
     public boolean validateToken(String token) {  // 자른 순수한 토큰을 받아와

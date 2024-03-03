@@ -21,11 +21,14 @@ import java.util.function.Supplier;
 
 // 강의 관련 컨트롤러
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api")
 public class LectureController {
 
     private final LectureService lectureService;
+
+    public LectureController(LectureService lectureService) {
+        this.lectureService = lectureService;
+    }
 
     // 강의 등록
     @PostMapping("/lecture")

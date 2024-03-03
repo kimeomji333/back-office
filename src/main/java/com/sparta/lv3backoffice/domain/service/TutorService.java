@@ -18,13 +18,20 @@ import java.util.List;
 
 // 강사 관련 서비스
 @Service
-@RequiredArgsConstructor
+
 public class TutorService {
     private final TutorRepository tutorRepository;
     private final LectureRepository lectureRepository;
     private final JwtUtil jwtUtil;
 
+
     private final String MANAGER_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+
+    public TutorService(TutorRepository tutorRepository, LectureRepository lectureRepository, JwtUtil jwtUtil) {
+        this.tutorRepository = tutorRepository;
+        this.lectureRepository = lectureRepository;
+        this.jwtUtil = jwtUtil;
+    }
 
     // 강사 등록
     public TutorResponseDto registerTutor(TutorRequestDto tutorRequestDto, @RequestHeader("Authorization") String token) {
@@ -40,7 +47,7 @@ public class TutorService {
     public TutorResponseDto updateTutor(Long tutorId, TutorRequestDto tutorRequestDto, @RequestHeader("Authorization") String token) {
 
         // 강사가 DB 에 존재하는지 확인
-        Tutor tutor = tutorRepository.findById(tutorId).orElseThrow(() ->
+        Tutor tutor = tutorRepository.findTutorId(tutorId).orElseThrow(() ->
                 new IllegalArgumentException("선택한 강사는 존재하지 않습니다."));
 
         tutor.update(tutorRequestDto);
