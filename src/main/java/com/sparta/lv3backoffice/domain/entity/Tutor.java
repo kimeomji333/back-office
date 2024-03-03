@@ -2,10 +2,12 @@ package com.sparta.lv3backoffice.domain.entity;
 
 import com.sparta.lv3backoffice.domain.dto.tutor.TutorRequestDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Builder
 @Entity
 @Getter
 @NoArgsConstructor
@@ -17,9 +19,8 @@ public class Tutor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tutorId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_id")
-    private Lecture lecture;
+    @OneToMany(mappedBy = "tutor")
+    private List<Lecture> lectures = new ArrayList<>();
 
     @Column(nullable = false)
     private String tutorName;
@@ -44,11 +45,11 @@ public class Tutor {
         this.phoneNumber = tutorRequestDto.getPhoneNumber();
         this.bio = tutorRequestDto.getBio();
     }
-
-    public void update(TutorRequestDto tutorRequestDto) {
-        this.experienceYears = tutorRequestDto.getExperienceYears();
-        this.company =tutorRequestDto.getCompany();
-        this.phoneNumber = tutorRequestDto.getPhoneNumber();
-        this.bio = tutorRequestDto.getBio();
+    public void update(TutorRequestDto requestDto) {
+        this.tutorName = requestDto.getTutorName();
+        this.experienceYears = requestDto.getExperienceYears();
+        this.company =requestDto.getCompany();
+        this.phoneNumber = requestDto.getPhoneNumber();
+        this.bio = requestDto.getBio();
     }
 }

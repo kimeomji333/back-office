@@ -1,6 +1,7 @@
 package com.sparta.lv3backoffice.domain.dto.lecture;
 
 import com.sparta.lv3backoffice.domain.entity.Lecture;
+import com.sparta.lv3backoffice.domain.entity.Tutor;
 import lombok.Getter;
 
 @Getter

@@ -33,12 +33,4 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
-
-    public User(String username, String password, String email, Department department, UserRoleEnum role) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.department = department;
-        this.role = role;
-    }
 }

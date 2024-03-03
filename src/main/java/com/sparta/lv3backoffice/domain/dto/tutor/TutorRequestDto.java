@@ -1,5 +1,6 @@
 package com.sparta.lv3backoffice.domain.dto.tutor;
 
+import com.sparta.lv3backoffice.domain.entity.Tutor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,4 +16,13 @@ public class TutorRequestDto {
     private boolean manager = false;
     private String managerToken = "";
 
+    public Tutor toEntity() {
+        return Tutor.builder()
+                .tutorName(tutorName)
+                .experienceYears(experienceYears)
+                .company(company)
+                .phoneNumber(phoneNumber)
+                .bio(bio)
+                .build();
+    }
 }

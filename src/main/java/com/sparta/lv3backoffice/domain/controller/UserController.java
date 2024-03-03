@@ -2,12 +2,17 @@ package com.sparta.lv3backoffice.domain.controller;
 
 import com.sparta.lv3backoffice.domain.dto.user.LoginRequestDto;
 import com.sparta.lv3backoffice.domain.dto.user.SignupRequestDto;
+import com.sparta.lv3backoffice.domain.dto.user.SignupResponseDto;
 import com.sparta.lv3backoffice.domain.service.UserService;
 import com.sparta.lv3backoffice.global.exception.NotFoundException;
 import com.sparta.lv3backoffice.global.exception.UnauthorizedException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 // 로그인, 가입 컨트롤러
@@ -32,44 +39,19 @@ public class UserController {
 
     // 회원 가입
     @PostMapping("/user/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequestDto signupRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
         // Validation 예외처리
-        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        if (!fieldErrors.isEmpty()) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : fieldErrors) {
                 log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
             }
+            return ResponseEntity.badRequest().body("회원가입 요청이 잘못되었습니다.");
         }
 
-        return handleRequest(() -> {
-            userService.signup(signupRequestDto);
-            return ResponseEntity.ok("성공적으로 회원가입이 완료되었습니다.");
-        });
+        SignupResponseDto responseDto = userService.signup(requestDto);
+        return ResponseEntity.ok(responseDto);
     }
 
-    // 로그인 // 이메일, 비밀번호
-    @PostMapping("/user/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
-        String email = loginRequestDto.getEmail();
-        String password = loginRequestDto.getPassword();
-
-        return handleRequest(() -> {
-            userService.login(email, password);
-            return ResponseEntity.ok("성공적으로 회원가입이 완료되었습니다.");
-        });
-    }
-
-
-    private ResponseEntity<?> handleRequest(Supplier<ResponseEntity<?>> supplier) {
-        try {
-            return supplier.get();
-        } catch (UnauthorizedException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("인터넷 서버 오류: " + e.getMessage());
-        }
-    }
 }
 

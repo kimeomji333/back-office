@@ -55,14 +55,13 @@ public class JwtUtil {
 
     //--------------------------------------------------------------------------------------
     // JWT 생성
-    // 토큰 생성
     public String createToken(String username, UserRoleEnum role) {
         Date date = new Date();
 
         return BEARER_PREFIX +   // 아래 데이터(필요한 것 선택해서)와 암께 암호화가 된다. 토큰이 만들어지면서 BEARER_PREFIX 와 함께져 반환이 된다.
                 Jwts.builder()  // Jwts 클래스에 builder 사용해서 쭉 아래와 같이 데이터를 넣는다. 마지막에 compact 하면 Jwt 토큰이 생성된다.
                         .setSubject(username) // 사용자 식별자값(ID) // username or PK 값을 넣으면 된다.
-                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한   // claim 에 키값, 벨류(권한) 값 넣을 수 있다.
+                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간 설정 = new Date(현재시간 + 만료시간)
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // secretKey, 암호화 알고리즘(HS256)
@@ -79,8 +78,16 @@ public class JwtUtil {
         return null;
     }
 
+    // JWT 토큰 substring
+    public String substringToken(String tokenValue) {
+        if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
+            return tokenValue.substring(7);
+        }
+        log.error("Not Found Token");
+        throw new NullPointerException("Not Found Token");
+    }
+
     // JWT 검증
-    // 토큰 검증
     public boolean validateToken(String token) {  // 자른 순수한 토큰을 받아와
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);  // 이 한 줄로 토큰의 위변조 체크
@@ -98,7 +105,6 @@ public class JwtUtil {
     }
 
     // JWT 에서 사용자 정보 가져오기
-    // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody(); // 마지막에 body 부분에 Claims 에 데이터들이 들어있는지 확인.  jwt 가 Claim 기반 웹토큰이니,
     }

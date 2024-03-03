@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 public class Lecture extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lectureId;
+    private Long LectureId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "tutor_id")
     private Tutor tutorId;
 
@@ -37,6 +37,7 @@ public class Lecture extends Timestamped {
 
     @Column(nullable = false)
     private Long price;
+
 
     public Lecture(Tutor tutorId, String title, String description, String category, Long price) {
         this.tutorId = tutorId;

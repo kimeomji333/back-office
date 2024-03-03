@@ -9,4 +9,5 @@ import java.util.Collection;
 
 @Repository
 public interface TutorRepository extends JpaRepository <Tutor, Long> {
+    Tutor findTutorId(Long tutorId);
 }

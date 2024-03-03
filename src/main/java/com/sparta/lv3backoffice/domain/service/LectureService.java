@@ -11,6 +11,7 @@ import com.sparta.lv3backoffice.domain.repository.LectureRepository;
 import com.sparta.lv3backoffice.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -24,55 +25,55 @@ public class LectureService {
     private final String MANAGER_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     // 강의 등록
-    public LectureResponseDto registerLecture(LectureRequestDto lectureRequestDto, String token) {
+    public LectureResponseDto registerLecture(LectureRequestDto lectureRequestDto, @RequestHeader("Authorization") String token) {
         // 인증 : 토큰 확인
         if (!jwtUtil.validateToken(token)) {
             throw new IllegalArgumentException("Token Error");
         }
 
         // 강의 등록
-        Lecture lecture = new Lecture(lectureRequestDto);
-        Lecture saveLecture = lectureRepository.save(lecture);
-        LectureResponseDto lectureResponseDto = new LectureResponseDto(lecture);
-
-        return lectureResponseDto;
+        Lecture lecture = lectureRepository.save(lectureRequestDto.toEntity());
+        return new LectureResponseDto(lecture);
     }
 
     // 선택한 강의 정보 수정
-    public Long updateLecture(Long lectureId, LectureRequestDto lectureRequestDto, String token) {
-
-        // 인증 : 토큰 확인
-        if (!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("Token Error");
-        }
-
-        // 인가 : 권한 확인
-        UserRoleEnum role = UserRoleEnum.STAFF;  // 일반 사용자 권한을 넣어놓은다.
-        if (lectureRequestDto.isManager()) {   // boolean type은 is 로 시작함(규칙), isAdmin // (true)면 관리자 권한으로 회원가입
-            if (!MANAGER_TOKEN.equals(lectureRequestDto.getManagerToken())) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
-            }
-            role = UserRoleEnum.MANAGER;  // 위에서 USER -> ADMIN 권한으로 덮어짐.
-        }
+    public LectureResponseDto updateLecture(Long lectureId, LectureRequestDto lectureRequestDto, @RequestHeader("Authorization") String token) {
 
         // 강의가 DB에 존재하는지 확인
-        Lecture lecture = findLectureId(lectureId);
+        Lecture lecture = (Lecture) lectureRepository.findLectureId(lectureId).orElseThrow(() ->
+                new IllegalArgumentException("선택한 강의는 존재하지 않습니다."));
 
         lecture.update(lectureRequestDto);
 
-        return lectureId;
+        return new LectureResponseDto(lecture);
     }
+// 필요하는지이이잉 !!!!!?????????
+//        // 인증 : 토큰 확인
+//        if (!jwtUtil.validateToken(token)) {
+//            throw new IllegalArgumentException("Token Error");
+//        }
+//
+//        // 인가 : 권한 확인
+//        UserRoleEnum role = UserRoleEnum.STAFF;  // 일반 사용자 권한을 넣어놓은다.
+//        if (lectureRequestDto.isManager()) {
+//            if (!MANAGER_TOKEN.equals(lectureRequestDto.getManagerToken())) {
+//                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+//            }
+//            role = UserRoleEnum.MANAGER;  // 위에서 USER -> ADMIN 권한으로 덮어짐.
+//        }
+
 
     // 선택 강의 조회
-    public LectureResponseDto getTutor(Long lectureId, String token) {
+    public LectureResponseDto getTutor(Long lectureId,  @RequestHeader("Authorization") String token) {
 
-        // 인증 : 토큰 확인
-        if (!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("Token Error");
-        }
+//        // 인증 : 토큰 확인
+//        if (!jwtUtil.validateToken(token)) {
+//            throw new IllegalArgumentException("Token Error");
+//        }
 
         // 강의가 DB에 존재하는지 확인
-        Lecture lecture = findLectureId(lectureId);
+        Lecture lecture = (Lecture) lectureRepository.findLectureId(lectureId).orElseThrow(() ->
+                new IllegalArgumentException("선택한 강의는 존재하지 않습니다."));
 
         return new LectureResponseDto(lecture);
     }
@@ -88,10 +89,6 @@ public class LectureService {
         // 해당 카테고리에 강의가 DB에 존재하는지 확인 후 반환
         return (List<Lecture>) lectureRepository.findByCategoryOrderByCreatedAtDesc(category);
     }
-
-    private Lecture findLectureId(Long lectureId) {
-        return lectureRepository.findById(lectureId).orElseThrow(() ->
-                new IllegalArgumentException("선택한 강의는 존재하지 않습니다.")
-        );
-    }
 }
+
+
