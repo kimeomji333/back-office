@@ -19,6 +19,7 @@ public class Lecture extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lectureId;
 
+    // 다대일 관계 매핑 : tutor 엔티티의 기본 키와 연결될 외래 키 이름
     @ManyToOne
     @JoinColumn(name = "tutor_id")
     private Tutor tutor;

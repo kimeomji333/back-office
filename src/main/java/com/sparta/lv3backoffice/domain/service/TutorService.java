@@ -15,31 +15,18 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @RequiredArgsConstructor
 public class TutorService {
     private final TutorRepository tutorRepository;
-    private final LectureRepository lectureRepository;
-    private final JwtUtil jwtUtil;
 
     // 강사 등록
     public TutorResponseDto registerTutor(TutorRequestDto tutorRequestDto, String token) {
-
-//        // 인증 : 토큰 확인
-//        if (!jwtUtil.validateToken(token)) {
-//            throw new IllegalArgumentException("Token Error");
-//        }
 
         // 강사 등록
         Tutor tutor = tutorRepository.save(tutorRequestDto.toEntity());
         return new TutorResponseDto(tutor);
     }
 
-
     // 선택한 강사 정보 수정 (MANAGER 만 가능)
     @Transactional
-    public TutorResponseDto updateTutor(Long tutorId, TutorRequestDto tutorRequestDto, @RequestHeader("Authorization") String token) {
-
-        // 인증 : 토큰 확인
-//        if (!jwtUtil.validateToken(token)) {
-//            throw new IllegalArgumentException("Token Error");
-//        }
+    public TutorResponseDto updateTutor(Long tutorId, TutorRequestDto tutorRequestDto, String token) {
 
         // 강사가 DB 에 존재하는지 확인
         Tutor tutor = tutorRepository.findByTutorId(tutorId).orElseThrow(() ->
@@ -49,14 +36,8 @@ public class TutorService {
         return new TutorResponseDto(tutor);
     }
 
-
     // 선택 강사 조회
-    public TutorResponseDto getTutor(Long tutorId, @RequestHeader("Authorization") String token) {
-
-//        // 인증 : 토큰 확인
-//        if (!jwtUtil.validateToken(token)) {
-//            throw new IllegalArgumentException("Token Error");
-//        }
+    public TutorResponseDto getTutor(Long tutorId, String token) {
 
         // 강사가 DB 에 존재하는지 확인
         Tutor tutor = tutorRepository.findByTutorId(tutorId).orElseThrow(() ->

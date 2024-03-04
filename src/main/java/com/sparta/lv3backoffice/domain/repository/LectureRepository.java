@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 @EnableJpaRepositories
 public interface LectureRepository extends JpaRepository<Lecture, Long>{
-    List<Lecture> findByCategoryOrderByCreatedAtDesc(String category);
     Optional<Lecture> findByLectureId(Long lectureId);
+    List<Lecture> findByTutorTutorIdOrderByCreatedAtDesc(Long tutorId);
+    List<Lecture> findByCategoryOrderByCreatedAtDesc(String category);
 }

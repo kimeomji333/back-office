@@ -53,6 +53,14 @@ public class LectureController {
         });
     }
 
+    // 선택한 강사가 촬영한 강의 목록 조회
+    @GetMapping("/lecturesByTutor/{tutorId}")
+    public ResponseEntity<List<LectureResponseDto>> getLecturesByTutor(@PathVariable Long tutorId, @RequestHeader("Authorization") String token) {
+        List<LectureResponseDto> lectureList = lectureService.getLecturesByTutor(tutorId, token);
+        return ResponseEntity.ok(lectureList);
+    }
+
+
     // 카테고리별 강의 목록 조회
     @GetMapping("/lecture/category/{category}")
     public ResponseEntity<?> getLectureByCategory(@PathVariable String category, @RequestHeader("Authorization") String token) {

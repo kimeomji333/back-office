@@ -19,7 +19,7 @@ public class Tutor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tutorId;
 
-    @OneToMany(mappedBy = "tutor")
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
     private List<Lecture> lectureList = new ArrayList<>();
 
     @Column(nullable = false)
@@ -36,11 +36,6 @@ public class Tutor {
 
     @Column(nullable = false)
     private String bio;
-
-//    public void addLectures(Lecture lecture) {
-//        this.lectureList.add(lecture);
-//        lecture.setTutor(this); // 외래 키 설정
-//    }
 
     public void update(TutorRequestDto tutorRequestDto) {
         this.tutorName = tutorRequestDto.getTutorName();

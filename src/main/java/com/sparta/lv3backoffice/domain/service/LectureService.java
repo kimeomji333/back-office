@@ -21,10 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LectureService {
     private final LectureRepository lectureRepository;
-    private final JwtUtil jwtUtil;
 
     // 강의 등록
-    public LectureResponseDto registerLecture(LectureRequestDto lectureRequestDto, @RequestHeader("Authorization") String token) {
+    public LectureResponseDto registerLecture(LectureRequestDto lectureRequestDto, String token) {
 
         // 강의 등록
         Lecture lecture = lectureRepository.save(lectureRequestDto.toEntity());
@@ -33,7 +32,7 @@ public class LectureService {
 
     // 선택한 강의 정보 수정 (MANAGER 만 가능)
     @Transactional
-    public LectureResponseDto updateLecture(Long lectureId, LectureRequestDto lectureRequestDto, @RequestHeader("Authorization") String token) {
+    public LectureResponseDto updateLecture(Long lectureId, LectureRequestDto lectureRequestDto, String token) {
 
         // 강의가 DB에 존재하는지 확인
         Lecture lecture = lectureRepository.findByLectureId(lectureId).orElseThrow(() ->
@@ -44,13 +43,19 @@ public class LectureService {
     }
 
     // 선택 강의 조회
-    public LectureResponseDto getLecture(Long lectureId, @RequestHeader("Authorization") String token) {
+    public LectureResponseDto getLecture(Long lectureId, String token) {
 
         // 강의가 DB에 존재하는지 확인
         Lecture lecture = lectureRepository.findByLectureId(lectureId).orElseThrow(() ->
                 new IllegalArgumentException("선택한 강의는 존재하지 않습니다."));
 
         return new LectureResponseDto(lecture);
+    }
+
+    // 선택한 강사가 촬영한 강의 목록 조회
+    public List<LectureResponseDto> getLecturesByTutor(Long tutorId, String token) {
+        List<Lecture> lectureList = lectureRepository.findByTutorTutorIdOrderByCreatedAtDesc(tutorId);
+        return lectureList.stream().map(LectureResponseDto::new).collect(Collectors.toList());
     }
 
     // 카테고리별 강의 목록 조회
