@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class LectureResponseDto {
+    private Long lectureId;
     private String tutorName;
     private String title;
     private String description;
@@ -13,6 +14,7 @@ public class LectureResponseDto {
     private Long price;
 
     public LectureResponseDto(Lecture lecture) {
+        this.lectureId = lecture.getLectureId();
         this.tutorName = lecture.getTutorName();
         this.title = lecture.getTitle();
         this.description = lecture.getDescription();

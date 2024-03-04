@@ -14,7 +14,6 @@ public class TutorRequestDto {
     private String bio;
 
     private boolean manager = false;
-    private String managerToken = "";
 
     public Tutor toEntity() {
         return Tutor.builder()

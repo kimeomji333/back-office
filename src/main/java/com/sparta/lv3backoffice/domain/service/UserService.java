@@ -1,8 +1,5 @@
 package com.sparta.lv3backoffice.domain.service;
 
-
-// 로그인, 가입 서비스
-
 import com.sparta.lv3backoffice.domain.dto.user.SignupRequestDto;
 import com.sparta.lv3backoffice.domain.dto.user.SignupResponseDto;
 import com.sparta.lv3backoffice.domain.entity.Department;
@@ -22,9 +19,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
 
-    // ADMIN_TOKEN
+    // ADMIN_TOKEN : 관리자로 회원가입 권한 부여
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     // 회원 가입
@@ -38,13 +34,9 @@ public class UserService {
             throw new IllegalArgumentException("중복된 Email 입니다.");
         }
 
-        // 사용자 ROLE 확인 (권한확인)
+        // 관리자 department 부서로 ROLE 확인 (권한확인)
         UserRoleEnum role = UserRoleEnum.STAFF;
-        // 사용자 department 확인
         if (!requestDto.getDepartment().equals(Department.MARKETING)) {
-            if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
-            }
             role = UserRoleEnum.MANAGER;  // 위에서 USER -> ADMIN 권한으로 덮어짐.
         }
 

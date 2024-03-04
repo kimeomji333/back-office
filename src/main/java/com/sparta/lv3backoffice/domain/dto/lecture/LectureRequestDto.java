@@ -15,7 +15,6 @@ public class LectureRequestDto {
     private Long price;
 
     private boolean manager = false;
-    private String managerToken = "";
 
     public Lecture toEntity() {
         return Lecture.builder()

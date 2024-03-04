@@ -8,20 +8,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@Getter
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "lectures")
 public class Lecture extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long LectureId;
+    private Long lectureId;
 
     @ManyToOne
     @JoinColumn(name = "tutor_id")
-    private Tutor tutorId;
+    private Tutor tutor;
 
     @Column(nullable = false)
     private String tutorName;
@@ -37,23 +37,6 @@ public class Lecture extends Timestamped {
 
     @Column(nullable = false)
     private Long price;
-
-
-    public Lecture(Tutor tutorId, String title, String description, String category, Long price) {
-        this.tutorId = tutorId;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.price = price;
-    }
-
-    public Lecture(LectureRequestDto lectureRequestDto) {
-        this.tutorName = lectureRequestDto.getTutorName();
-        this.title = lectureRequestDto.getTitle();
-        this.description = lectureRequestDto.getDescription();
-        this.category = lectureRequestDto.getCategory();
-        this.price = lectureRequestDto.getPrice();
-    }
 
     public void update(LectureRequestDto lectureRequestDto) {
         this.tutorName = lectureRequestDto.getTutorName();

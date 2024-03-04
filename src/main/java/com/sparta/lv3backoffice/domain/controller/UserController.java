@@ -1,19 +1,11 @@
 package com.sparta.lv3backoffice.domain.controller;
 
-import com.sparta.lv3backoffice.domain.dto.user.LoginRequestDto;
 import com.sparta.lv3backoffice.domain.dto.user.SignupRequestDto;
 import com.sparta.lv3backoffice.domain.dto.user.SignupResponseDto;
 import com.sparta.lv3backoffice.domain.service.UserService;
-import com.sparta.lv3backoffice.global.exception.NotFoundException;
-import com.sparta.lv3backoffice.global.exception.UnauthorizedException;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -22,12 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
-
-// 로그인, 가입 컨트롤러
 
 @Slf4j
 @RestController
@@ -40,6 +27,7 @@ public class UserController {
     // 회원 가입
     @PostMapping("/user/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
+
         // Validation 예외처리
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -52,6 +40,5 @@ public class UserController {
         SignupResponseDto responseDto = userService.signup(requestDto);
         return ResponseEntity.ok(responseDto);
     }
-
 }
 

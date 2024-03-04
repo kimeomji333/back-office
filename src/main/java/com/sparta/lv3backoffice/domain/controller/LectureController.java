@@ -2,9 +2,7 @@ package com.sparta.lv3backoffice.domain.controller;
 
 import com.sparta.lv3backoffice.domain.dto.lecture.LectureRequestDto;
 import com.sparta.lv3backoffice.domain.dto.lecture.LectureResponseDto;
-import com.sparta.lv3backoffice.domain.dto.tutor.TutorRequestDto;
 import com.sparta.lv3backoffice.domain.entity.Lecture;
-import com.sparta.lv3backoffice.domain.entity.Tutor;
 import com.sparta.lv3backoffice.domain.entity.UserRoleEnum;
 import com.sparta.lv3backoffice.domain.service.LectureService;
 import com.sparta.lv3backoffice.global.exception.NotFoundException;
@@ -19,16 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.function.Supplier;
 
-// 강의 관련 컨트롤러
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class LectureController {
 
     private final LectureService lectureService;
-
-    public LectureController(LectureService lectureService) {
-        this.lectureService = lectureService;
-    }
 
     // 강의 등록
     @PostMapping("/lecture")
@@ -39,8 +33,8 @@ public class LectureController {
         });
     }
 
-    // 선택한 강의 정보 수정
-    //@Secured(UserRoleEnum.Authority.MANAGER)
+    // 선택한 강의 정보 수정 (MANAGER 만 가능)
+    @Secured(UserRoleEnum.Authority.MANAGER)
     @Transactional
     @PutMapping("/lecture/{lectureId}")
     public ResponseEntity<?> updateLecture(@PathVariable Long lectureId, @RequestBody LectureRequestDto lectureRequestDto, @RequestHeader("Authorization") String token) {
@@ -54,20 +48,22 @@ public class LectureController {
     @GetMapping("/lecture/{lectureId}")
     public ResponseEntity<?> getLecture(@PathVariable Long lectureId, @RequestHeader("Authorization") String token) {
         return handleRequest(() -> {
-            LectureResponseDto responseDto = lectureService.getTutor(lectureId, token);
+            LectureResponseDto responseDto = lectureService.getLecture(lectureId, token);
             return ResponseEntity.ok(responseDto);
         });
     }
 
     // 카테고리별 강의 목록 조회
-    @GetMapping("/lecture/{category}")
+    @GetMapping("/lecture/category/{category}")
     public ResponseEntity<?> getLectureByCategory(@PathVariable String category, @RequestHeader("Authorization") String token) {
         return handleRequest(() -> {
-            List<Lecture> lectures = lectureService.getLecturesByCategory(category, token);
-            return ResponseEntity.ok(lectures);
+            List<LectureResponseDto> responseDto = lectureService.getLecturesByCategory(category, token);
+            return ResponseEntity.ok(responseDto);
         });
     }
 
+
+    // ------------------ handleRequest 메서드 --------
     private ResponseEntity<?> handleRequest(Supplier<ResponseEntity<?>> supplier) {
         try {
             return supplier.get();

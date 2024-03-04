@@ -19,8 +19,8 @@ public class Tutor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tutorId;
 
-    @OneToMany
-    private List<Lecture> lectures = new ArrayList<>();
+    @OneToMany(mappedBy = "tutor")
+    private List<Lecture> lectureList = new ArrayList<>();
 
     @Column(nullable = false)
     private String tutorName;
@@ -37,19 +37,16 @@ public class Tutor {
     @Column(nullable = false)
     private String bio;
 
+//    public void addLectures(Lecture lecture) {
+//        this.lectureList.add(lecture);
+//        lecture.setTutor(this); // 외래 키 설정
+//    }
 
-    public Tutor(TutorRequestDto tutorRequestDto) {
+    public void update(TutorRequestDto tutorRequestDto) {
         this.tutorName = tutorRequestDto.getTutorName();
         this.experienceYears = tutorRequestDto.getExperienceYears();
-        this.company =tutorRequestDto.getCompany();
+        this.company = tutorRequestDto.getCompany();
         this.phoneNumber = tutorRequestDto.getPhoneNumber();
         this.bio = tutorRequestDto.getBio();
-    }
-    public void update(TutorRequestDto requestDto) {
-        this.tutorName = requestDto.getTutorName();
-        this.experienceYears = requestDto.getExperienceYears();
-        this.company =requestDto.getCompany();
-        this.phoneNumber = requestDto.getPhoneNumber();
-        this.bio = requestDto.getBio();
     }
 }

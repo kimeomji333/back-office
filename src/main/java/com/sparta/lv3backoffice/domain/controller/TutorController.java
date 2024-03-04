@@ -1,6 +1,5 @@
 package com.sparta.lv3backoffice.domain.controller;
 
-
 import com.sparta.lv3backoffice.domain.dto.tutor.TutorRequestDto;
 import com.sparta.lv3backoffice.domain.dto.tutor.TutorResponseDto;
 import com.sparta.lv3backoffice.domain.entity.Lecture;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.function.Supplier;
 
-// 강사 관련 컨트롤러
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -37,8 +35,8 @@ public class TutorController {
         });
     }
 
-    // 선택한 강사 정보 수정
-    //@Secured(UserRoleEnum.Authority.MANAGER) // MANAGER 용
+    // 선택한 강사 정보 수정 (MANAGER 만 가능)
+    @Secured(UserRoleEnum.Authority.MANAGER) // MANAGER 용
     @PutMapping("/tutor/{tutorId}")
     public ResponseEntity<?> updateTutor(@PathVariable Long tutorId, @RequestBody TutorRequestDto tutorRequestDto, @RequestHeader("Authorization") String token) {
         return handleRequest(() -> {
@@ -55,7 +53,6 @@ public class TutorController {
             return ResponseEntity.ok(responseDto);
         });
     }
-
 
 
     // ------------------ handleRequest 메서드 --------

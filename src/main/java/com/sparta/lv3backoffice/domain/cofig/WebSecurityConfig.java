@@ -1,8 +1,8 @@
 package com.sparta.lv3backoffice.domain.cofig;
 
-import com.sparta.lv3backoffice.global.security.JwtAuthorizationFilter;
-import com.sparta.lv3backoffice.global.security.JwtAuthenticationFilter;
 import com.sparta.lv3backoffice.global.jwt.JwtUtil;
+import com.sparta.lv3backoffice.global.security.JwtAuthenticationFilter;
+import com.sparta.lv3backoffice.global.security.JwtAuthorizationFilter;
 import com.sparta.lv3backoffice.global.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
